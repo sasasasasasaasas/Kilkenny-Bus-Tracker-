@@ -1,0 +1,11 @@
+node_modules
+.env*
+*.log
+.DS_Store
+config/stream_keys.json
+dist
+build
+.cache
+coverage
+**/.env
+**/.env.*

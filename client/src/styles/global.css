@@ -1,0 +1,67 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+	background: #000;
+	color: #fff;
+}
+
+.app-header nav {
+	display: flex;
+	gap: 12px;
+	padding: 12px 20px;
+	border-bottom: 2px solid gold;
+	background: #111;
+}
+
+.home-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	height: calc(100vh - 52px);
+}
+
+.home-grid .sidebar {
+	padding: 12px;
+	overflow: auto;
+	background: #111;
+}
+
+.ads-panel form input {
+	padding: 8px;
+	margin-right: 8px;
+	background: #000;
+	border: 1px solid #444;
+	color: #fff;
+	border-radius: 4px;
+}
+
+.ads-panel form button {
+	padding: 8px 12px;
+	background: gold;
+	border: none;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.product-grid {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	padding: 12px;
+}
+
+.product {
+	background: #111;
+	border: 1px solid #222;
+	border-radius: 6px;
+	padding: 12px;
+	text-decoration: none;
+	color: #fff;
+}
+
+.product .title { font-weight: bold; margin-bottom: 8px; }
+.product .price { color: gold; }
+
+@media (max-width: 768px) {
+	.home-grid { grid-template-columns: 1fr; }
+}
