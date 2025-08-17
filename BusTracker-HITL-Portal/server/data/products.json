@@ -1,0 +1,227 @@
+[
+  {
+    "id": "9icezhzu",
+    "sku": "SKU-1001",
+    "title": "Product 1",
+    "description": "Great product number 1.",
+    "price": 80.05,
+    "imageUrl": "https://picsum.photos/seed/product1/400/300",
+    "orderLink": "https://example.com/order?sku=1001"
+  },
+  {
+    "id": "d22dh6vj",
+    "sku": "SKU-1002",
+    "title": "Product 2",
+    "description": "Great product number 2.",
+    "price": 35.25,
+    "imageUrl": "https://picsum.photos/seed/product2/400/300",
+    "orderLink": "https://example.com/order?sku=1002"
+  },
+  {
+    "id": "uexafnw5",
+    "sku": "SKU-1003",
+    "title": "Product 3",
+    "description": "Great product number 3.",
+    "price": 54.29,
+    "imageUrl": "https://picsum.photos/seed/product3/400/300",
+    "orderLink": "https://example.com/order?sku=1003"
+  },
+  {
+    "id": "ilwq1uox",
+    "sku": "SKU-1004",
+    "title": "Product 4",
+    "description": "Great product number 4.",
+    "price": 25.63,
+    "imageUrl": "https://picsum.photos/seed/product4/400/300",
+    "orderLink": "https://example.com/order?sku=1004"
+  },
+  {
+    "id": "z8cwgk81",
+    "sku": "SKU-1005",
+    "title": "Product 5",
+    "description": "Great product number 5.",
+    "price": 41.13,
+    "imageUrl": "https://picsum.photos/seed/product5/400/300",
+    "orderLink": "https://example.com/order?sku=1005"
+  },
+  {
+    "id": "ezd1k317",
+    "sku": "SKU-1006",
+    "title": "Product 6",
+    "description": "Great product number 6.",
+    "price": 78.87,
+    "imageUrl": "https://picsum.photos/seed/product6/400/300",
+    "orderLink": "https://example.com/order?sku=1006"
+  },
+  {
+    "id": "vvm9kdad",
+    "sku": "SKU-1007",
+    "title": "Product 7",
+    "description": "Great product number 7.",
+    "price": 59.92,
+    "imageUrl": "https://picsum.photos/seed/product7/400/300",
+    "orderLink": "https://example.com/order?sku=1007"
+  },
+  {
+    "id": "81eip2p6",
+    "sku": "SKU-1008",
+    "title": "Product 8",
+    "description": "Great product number 8.",
+    "price": 54.35,
+    "imageUrl": "https://picsum.photos/seed/product8/400/300",
+    "orderLink": "https://example.com/order?sku=1008"
+  },
+  {
+    "id": "vytci9xz",
+    "sku": "SKU-1009",
+    "title": "Product 9",
+    "description": "Great product number 9.",
+    "price": 44.82,
+    "imageUrl": "https://picsum.photos/seed/product9/400/300",
+    "orderLink": "https://example.com/order?sku=1009"
+  },
+  {
+    "id": "vs0t4jtl",
+    "sku": "SKU-1010",
+    "title": "Product 10",
+    "description": "Great product number 10.",
+    "price": 64.7,
+    "imageUrl": "https://picsum.photos/seed/product10/400/300",
+    "orderLink": "https://example.com/order?sku=1010"
+  },
+  {
+    "id": "epxk8ccn",
+    "sku": "SKU-1011",
+    "title": "Product 11",
+    "description": "Great product number 11.",
+    "price": 13.84,
+    "imageUrl": "https://picsum.photos/seed/product11/400/300",
+    "orderLink": "https://example.com/order?sku=1011"
+  },
+  {
+    "id": "2q0nyqco",
+    "sku": "SKU-1012",
+    "title": "Product 12",
+    "description": "Great product number 12.",
+    "price": 45.67,
+    "imageUrl": "https://picsum.photos/seed/product12/400/300",
+    "orderLink": "https://example.com/order?sku=1012"
+  },
+  {
+    "id": "7epybpwl",
+    "sku": "SKU-1013",
+    "title": "Product 13",
+    "description": "Great product number 13.",
+    "price": 36.45,
+    "imageUrl": "https://picsum.photos/seed/product13/400/300",
+    "orderLink": "https://example.com/order?sku=1013"
+  },
+  {
+    "id": "m5skxn8y",
+    "sku": "SKU-1014",
+    "title": "Product 14",
+    "description": "Great product number 14.",
+    "price": 56.86,
+    "imageUrl": "https://picsum.photos/seed/product14/400/300",
+    "orderLink": "https://example.com/order?sku=1014"
+  },
+  {
+    "id": "n7tuwjd9",
+    "sku": "SKU-1015",
+    "title": "Product 15",
+    "description": "Great product number 15.",
+    "price": 52.65,
+    "imageUrl": "https://picsum.photos/seed/product15/400/300",
+    "orderLink": "https://example.com/order?sku=1015"
+  },
+  {
+    "id": "kgzocali",
+    "sku": "SKU-1016",
+    "title": "Product 16",
+    "description": "Great product number 16.",
+    "price": 51.13,
+    "imageUrl": "https://picsum.photos/seed/product16/400/300",
+    "orderLink": "https://example.com/order?sku=1016"
+  },
+  {
+    "id": "va1b06uz",
+    "sku": "SKU-1017",
+    "title": "Product 17",
+    "description": "Great product number 17.",
+    "price": 35.21,
+    "imageUrl": "https://picsum.photos/seed/product17/400/300",
+    "orderLink": "https://example.com/order?sku=1017"
+  },
+  {
+    "id": "xnz8h5lj",
+    "sku": "SKU-1018",
+    "title": "Product 18",
+    "description": "Great product number 18.",
+    "price": 19,
+    "imageUrl": "https://picsum.photos/seed/product18/400/300",
+    "orderLink": "https://example.com/order?sku=1018"
+  },
+  {
+    "id": "gud2u7v8",
+    "sku": "SKU-1019",
+    "title": "Product 19",
+    "description": "Great product number 19.",
+    "price": 84.26,
+    "imageUrl": "https://picsum.photos/seed/product19/400/300",
+    "orderLink": "https://example.com/order?sku=1019"
+  },
+  {
+    "id": "f5aame10",
+    "sku": "SKU-1020",
+    "title": "Product 20",
+    "description": "Great product number 20.",
+    "price": 54.94,
+    "imageUrl": "https://picsum.photos/seed/product20/400/300",
+    "orderLink": "https://example.com/order?sku=1020"
+  },
+  {
+    "id": "4qbr0grj",
+    "sku": "SKU-1021",
+    "title": "Product 21",
+    "description": "Great product number 21.",
+    "price": 55.59,
+    "imageUrl": "https://picsum.photos/seed/product21/400/300",
+    "orderLink": "https://example.com/order?sku=1021"
+  },
+  {
+    "id": "q7zegujq",
+    "sku": "SKU-1022",
+    "title": "Product 22",
+    "description": "Great product number 22.",
+    "price": 42.79,
+    "imageUrl": "https://picsum.photos/seed/product22/400/300",
+    "orderLink": "https://example.com/order?sku=1022"
+  },
+  {
+    "id": "8sfhaz1q",
+    "sku": "SKU-1023",
+    "title": "Product 23",
+    "description": "Great product number 23.",
+    "price": 38.67,
+    "imageUrl": "https://picsum.photos/seed/product23/400/300",
+    "orderLink": "https://example.com/order?sku=1023"
+  },
+  {
+    "id": "bkll047p",
+    "sku": "SKU-1024",
+    "title": "Product 24",
+    "description": "Great product number 24.",
+    "price": 71.51,
+    "imageUrl": "https://picsum.photos/seed/product24/400/300",
+    "orderLink": "https://example.com/order?sku=1024"
+  },
+  {
+    "id": "718hiuad",
+    "sku": "SKU-1025",
+    "title": "Product 25",
+    "description": "Great product number 25.",
+    "price": 87.96,
+    "imageUrl": "https://picsum.photos/seed/product25/400/300",
+    "orderLink": "https://example.com/order?sku=1025"
+  }
+]
