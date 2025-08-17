@@ -6,16 +6,23 @@ export default function LostFound() {
 	const [message, setMessage] = useState('')
 	const [contact, setContact] = useState('')
 
-	const load = () => axios.get('/api/notes?type=lostfound').then(r => setItems(r.data))
+	const load = () => axios.get('/api/notes?type=lostfound')
+		.then(r => setItems(r.data))
+		.catch(err => console.error('Failed to load items:', err))
 
 	useEffect(() => { load() }, [])
 
 	const submit = async (e) => {
 		e.preventDefault()
 		if (!message) return
-		await axios.post('/api/notes', { type: 'lostfound', message, contact })
-		setMessage(''); setContact('');
-		load()
+		try {
+			await axios.post('/api/notes', { type: 'lostfound', message, contact })
+			setMessage(''); setContact('');
+			load()
+		} catch (err) {
+			console.error('Failed to submit item:', err)
+			alert('Failed to submit item. Please try again.')
+		}
 	}
 
 	return (

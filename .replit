@@ -2,3 +2,15 @@ modules = ["nodejs-20", "php-8.2", "web", "python-3.12"]
 
 [nix]
 channel = "stable-25_05"
+
+[workflows]
+runButton = "Start Server"
+
+[[workflows.workflow]]
+name = "Start Server"
+author = 2389114
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd BusTracker-HITL-Portal && npm install && npm start"
