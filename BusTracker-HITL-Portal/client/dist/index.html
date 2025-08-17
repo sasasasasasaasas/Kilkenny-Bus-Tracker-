@@ -1,13 +1,491 @@
+
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BusTracker HITL Portal</title>
-    <script type="module" crossorigin src="/assets/index-CEY_jCz3.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DtF9r-Za.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kilkenny Bus Tracker — Blocksmith Studio</title>
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --bg:#0B1220;--panel:#111827;--muted:#1F2937;--txt:#E5E7EB;--accent:#0EA5E9;--accent2:#F59E0B;--ok:#10B981;--warn:#F59E0B;--err:#EF4444;
+    }
+    html,body{background:var(--bg);color:var(--txt);}
+    /* Simple toast */
+    .toast{position:fixed;right:1rem;bottom:1rem;z-index:50}
+    .toast > div{animation:fadeIn .2s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    /* Mock map */
+    #mapCanvas{position:relative;background:linear-gradient(135deg,#0e1629 25%,#0b1220 25%,#0b1220 50%,#0e1629 50%,#0e1629 75%,#0b1220 75%,#0b1220 100%);background-size:28px 28px;border:1px solid #223;overflow:hidden}
+    .bus{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 2px #0008}
+    .bus::after{content:'🚌';position:absolute;left:-6px;top:-22px;font-size:14px}
+    /* Accordion visuals */
+    .acc-btn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+    .chev{transition:transform .15s ease}
+    /* Focus ring tweak */
+    .focus-ring:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:.75rem}
+  </style>
+</head>
+<body class="min-h-full">
+  <!-- Header -->
+  <header class="sticky top-0 z-20 bg-[#0B1220]/80 backdrop-blur border-b border-[#1f2a3a]">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-[var(--panel)] grid place-items-center text-[var(--accent)]">B</div>
+      <div class="flex-1">
+        <h1 class="text-lg sm:text-xl font-semibold tracking-wide">Kilkenny Bus Tracker — Blocksmith Studio</h1>
+        <p class="text-xs text-gray-400">One-page portal • Studio vibe • All actions inline</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span class="text-sm text-gray-300">Live</span>
+        </div>
+        <div id="clock" class="text-sm text-gray-300 tabular-nums">--:--:--</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 space-y-4">
+    <!-- Accordions -->
+    <section class="space-y-3" id="accordionRoot">
+      <!-- A: Bus Map -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="true" aria-controls="panel-map">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Live Bus Map (mock)</span>
+          </div>
+          <div class="text-xs text-gray-400">move + zoom | demo markers</div>
+        </button>
+        <div id="panel-map" role="region" class="px-4 pb-4 space-y-3">
+          <div class="flex items-center gap-2">
+            <button id="zoomIn" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Zoom +</button>
+            <button id="zoomOut" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Zoom −</button>
+            <button id="zoomReset" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Reset</button>
+            <span class="text-xs text-gray-400 ml-2">This is a visual demo; replace with real map feed later.</span>
+          </div>
+          <div id="mapCanvas" class="rounded-xl" style="height:320px;"></div>
+        </div>
+      </article>
+
+      <!-- B: Studio Stream -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-stream">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Studio Live Stream (placeholder)</span>
+          </div>
+          <div class="text-xs text-gray-400">ticker • report button • copy link</div>
+        </button>
+        <div id="panel-stream" hidden role="region" class="px-4 pb-4 space-y-3">
+          <div class="relative w-full aspect-video bg-[#0c1426] rounded-xl border border-[#1f2a3a] grid place-items-center text-gray-400">
+            <span>Stream goes here (iframe/poster)</span>
+            <div class="absolute bottom-2 left-2 right-2">
+              <div class="w-full text-xs px-3 py-1 bg-black/40 rounded-md border border-black/30">
+                <span id="ticker">Blocksmith Studio is live — please be respectful. You're visible on the public portal.</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="btnReport" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Report unusual behaviour</button>
+            <button id="btnCopyLink" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Copy stream link</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- C: Driver Request (stub) -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-driver">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Driver Request (stub)</span>
+          </div>
+          <div class="text-xs text-gray-400">no third-party; local simulation only</div>
+        </button>
+        <div id="panel-driver" hidden role="region" class="px-4 pb-4 space-y-3">
+          <form id="driverForm" class="grid sm:grid-cols-3 gap-3">
+            <label class="block">
+              <span class="text-xs text-gray-400">Stop</span>
+              <select id="stopSel" class="mt-1 w-full rounded-xl bg-[var(--muted)] px-3 py-2">
+                <option>KK1 — The Parade (NB)</option>
+                <option>KK1 — Market Cross</option>
+                <option>KK2 — MacDonagh Junction</option>
+                <option>KK2 — Waterford Rd</option>
+              </select>
+            </label>
+            <label class="block">
+              <span class="text-xs text-gray-400">Phone (E.164)</span>
+              <input id="phone" placeholder="+353871234567" class="mt-1 w-full rounded-xl bg-[var(--muted)] px-3 py-2" />
+            </label>
+            <label class="block sm:col-span-3">
+              <span class="text-xs text-gray-400">Pickup note (optional)</span>
+              <input id="note" placeholder="At shelter, blue jacket" class="mt-1 w-full rounded-xl bg-[var(--muted)] px-3 py-2" />
+            </label>
+            <div class="sm:col-span-3 flex flex-wrap items-center gap-2">
+              <button type="submit" class="px-3 py-2 rounded-xl bg-[var(--accent)] text-black font-semibold">Request Driver</button>
+              <span class="text-xs text-gray-400">By requesting, you consent to share your phone with a driver (simulation only).</span>
+            </div>
+          </form>
+          <div id="driverResult" class="text-sm text-gray-300"></div>
+        </div>
+      </article>
+
+      <!-- D: Notes / Lost & Found -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-notes">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Local Notes & Lost/Found</span>
+          </div>
+          <div class="text-xs text-gray-400">persists in localStorage</div>
+        </button>
+        <div id="panel-notes" hidden role="region" class="px-4 pb-4 space-y-3">
+          <form id="noteForm" class="grid sm:grid-cols-3 gap-3">
+            <label class="block">
+              <span class="text-xs text-gray-400">Name (optional)</span>
+              <input id="noteName" class="mt-1 w-full rounded-xl bg-[var(--muted)] px-3 py-2" />
+            </label>
+            <label class="block sm:col-span-2">
+              <span class="text-xs text-gray-400">Message</span>
+              <input id="noteMsg" required placeholder="Found blue backpack at Ormonde St…" class="mt-1 w-full rounded-xl bg-[var(--muted)] px-3 py-2" />
+            </label>
+            <div class="sm:col-span-3">
+              <button class="px-3 py-2 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Post</button>
+            </div>
+          </form>
+          <ul id="noteList" class="space-y-2"></ul>
+        </div>
+      </article>
+
+      <!-- E: Ads & Offers -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-ads">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Ads & Offers (demo)</span>
+          </div>
+          <div class="text-xs text-gray-400">carousel + impression counter</div>
+        </button>
+        <div id="panel-ads" hidden role="region" class="px-4 pb-4 space-y-3">
+          <div class="rounded-xl border border-[#1f2a3a] bg-[#0c1426] p-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div id="adSlot" class="w-72 h-24 rounded-lg bg-gradient-to-br from-[#0EA5E9]/20 to-[#F59E0B]/20 grid place-items-center text-sm text-gray-300">
+                Loading ad…
+              </div>
+              <div class="text-xs text-gray-400">
+                <div>Impressions: <span id="impCount">0</span></div>
+                <div>Current index: <span id="adIndex">0</span></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="adPrev" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Prev</button>
+              <button id="adNext" class="px-3 py-1.5 rounded-xl bg-[var(--muted)] hover:bg-[#273345]">Next</button>
+              <button id="adSwap" class="px-3 py-1.5 rounded-xl bg-[var(--accent2)] text-black">Swap order</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- F: Product Showcase (25) -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-products">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Product Showcase — 25 items</span>
+          </div>
+          <div class="text-xs text-gray-400">tap "Details" for inline sheet</div>
+        </button>
+        <div id="panel-products" hidden role="region" class="px-4 pb-4 space-y-3">
+          <div id="grid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"></div>
+        </div>
+      </article>
+
+      <!-- G: Security Ticker -->
+      <article class="rounded-2xl bg-[var(--panel)] shadow-lg border border-[#1f2a3a]">
+        <button class="acc-btn w-full flex items-center justify-between px-4 py-3 focus-ring" aria-expanded="false" aria-controls="panel-sec">
+          <div class="flex items-center gap-3">
+            <span class="chev inline-block text-gray-400">▶</span>
+            <span class="font-semibold">Security Ticker (demo)</span>
+          </div>
+          <div class="text-xs text-gray-400">simulate alerts • timestamped</div>
+        </button>
+        <div id="panel-sec" hidden role="region" class="px-4 pb-4 space-y-3">
+          <div class="flex items-center gap-2">
+            <button id="btnSimAlert" class="px-3 py-1.5 rounded-xl bg-[var(--err)] text-white">Simulate alert</button>
+            <span class="text-xs text-gray-400">Recent events:</span>
+          </div>
+          <ul id="secList" class="space-y-2"></ul>
+        </div>
+      </article>
+    </section>
+
+    <footer class="pt-4 text-center text-xs text-gray-500">
+      Powered by Blocksmith Studio — Kilkenny • One-page portal • <span class="text-[var(--accent)]">2025</span>
+    </footer>
+  </main>
+
+  <!-- Toast container -->
+  <div id="toast" class="toast space-y-2"></div>
+
+  <script>
+    // Utility: toast
+    function toast(msg, type='info'){
+      const host=document.getElementById('toast');
+      const el=document.createElement('div');
+      const color = type==='ok'?'bg-emerald-600':type==='warn'?'bg-amber-500':type==='err'?'bg-red-600':'bg-slate-700';
+      el.className=`text-sm ${color} text-white px-3 py-2 rounded-xl shadow`;
+      el.textContent=msg;
+      host.appendChild(el);
+      setTimeout(()=>{ el.remove(); }, 2500);
+    }
+    // Clock (Europe/Dublin)
+    function updateClock(){
+      const dt = new Date();
+      const fmt = dt.toLocaleTimeString('en-IE',{hour12:false,timeZone:'Europe/Dublin'});
+      document.getElementById('clock').textContent=fmt;
+    }
+    setInterval(updateClock,1000); updateClock();
+
+    // Accordion logic (one open at a time)
+    const accRoot = document.getElementById('accordionRoot');
+    accRoot.querySelectorAll('.acc-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const expanded = btn.getAttribute('aria-expanded')==='true';
+        // close all
+        accRoot.querySelectorAll('.acc-btn').forEach(b=>{
+          b.setAttribute('aria-expanded','false');
+          const id=b.getAttribute('aria-controls');
+          const panel=document.getElementById(id);
+          if(panel) panel.hidden=true;
+        });
+        // open this if it was previously closed
+        if(!expanded){
+          btn.setAttribute('aria-expanded','true');
+          const id=btn.getAttribute('aria-controls');
+          const panel=document.getElementById(id);
+          if(panel) panel.hidden=false;
+        }
+      });
+    });
+
+    // Mock map with moving buses
+    const map = document.getElementById('mapCanvas');
+    let zoom=1, buses=[];
+    function spawnBuses(n=6){
+      map.innerHTML='';
+      buses = Array.from({length:n}).map((_,i)=>{
+        const b = document.createElement('div');
+        b.className='bus';
+        const x = Math.random()* (map.clientWidth-16);
+        const y = Math.random()* (map.clientHeight-16);
+        b.style.left = x+'px'; b.style.top=y+'px';
+        b.dataset.vx = (Math.random()-.5)*1.2;
+        b.dataset.vy = (Math.random()-.5)*1.2;
+        map.appendChild(b);
+        return b;
+      });
+    }
+    function tickBuses(){
+      buses.forEach(b=>{
+        let x = parseFloat(b.style.left), y=parseFloat(b.style.top);
+        let vx = parseFloat(b.dataset.vx), vy=parseFloat(b.dataset.vy);
+        x+=vx; y+=vy;
+        if(x<0||x>map.clientWidth-16) { vx*=-1; b.dataset.vx=vx; }
+        if(y<0||y>map.clientHeight-16){ vy*=-1; b.dataset.vy=vy; }
+        b.style.left = Math.max(0,Math.min(map.clientWidth-16,x))+'px';
+        b.style.top  = Math.max(0,Math.min(map.clientHeight-16,y))+'px';
+      });
+    }
+    let busTimer;
+    function startBuses(){ clearInterval(busTimer); busTimer=setInterval(tickBuses,40); }
+    function rebuildMap(){ spawnBuses(6); startBuses(); }
+    window.addEventListener('resize',rebuildMap);
+    rebuildMap();
+
+    // Map controls
+    document.getElementById('zoomIn').onclick=()=>{ zoom=Math.min(1.6,zoom+0.1); map.style.transform=`scale(${zoom})`; map.style.transformOrigin='center'; };
+    document.getElementById('zoomOut').onclick=()=>{ zoom=Math.max(0.6,zoom-0.1); map.style.transform=`scale(${zoom})`; map.style.transformOrigin='center'; };
+    document.getElementById('zoomReset').onclick=()=>{ zoom=1; map.style.transform='scale(1)'; };
+
+    // Stream actions
+    document.getElementById('btnReport').onclick=()=>{ toast('Report sent. Thank you.', 'ok'); };
+    document.getElementById('btnCopyLink').onclick=async()=>{
+      try{ await navigator.clipboard.writeText(location.href + '#stream'); toast('Stream link copied','ok'); }
+      catch{ toast('Copy failed','err'); }
+    };
+
+    // Driver (stub)
+    const E164=/^\+[1-9]\d{6,14}$/;
+    document.getElementById('driverForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const stop = document.getElementById('stopSel').value;
+      const phone = document.getElementById('phone').value.trim();
+      const note = document.getElementById('note').value.trim();
+      if(!E164.test(phone)){ toast('Enter phone in E.164 format (e.g., +353871234567)','warn'); return; }
+      const res = document.getElementById('driverResult');
+      res.textContent='Searching for drivers…';
+      // Randomized outcome 6–12s
+      const delay = 6000 + Math.floor(Math.random()*6000);
+      setTimeout(()=>{
+        const ok = Math.random() < 0.6;
+        if(ok){
+          const eta = 5 + Math.floor(Math.random()*8);
+          res.innerHTML = `<span class="text-emerald-400">Driver accepted</span> • ETA ${eta}m • Stop: ${stop}`;
+          toast('Driver accepted (simulated)', 'ok');
+        } else {
+          res.innerHTML = `<span class="text-red-400">No drivers found</span> • Try again or call local taxi.`;
+          toast('No drivers now (simulated)', 'warn');
+        }
+      }, delay);
+    });
+
+    // Notes / Lost & Found (localStorage)
+    const NOTE_KEY='kk_notes_v1';
+    const listEl = document.getElementById('noteList');
+    function loadNotes(){ try{ return JSON.parse(localStorage.getItem(NOTE_KEY)||'[]'); }catch{return []} }
+    function saveNotes(arr){ localStorage.setItem(NOTE_KEY, JSON.stringify(arr)); }
+    function renderNotes(){
+      const items = loadNotes();
+      listEl.innerHTML='';
+      if(!items.length){
+        listEl.innerHTML='<li class="text-sm text-gray-400">No notes yet.</li>'; return;
+      }
+      items.forEach((it,i)=>{
+        const li=document.createElement('li');
+        li.className='p-3 rounded-xl bg-[#0c1426] border border-[#1f2a3a]';
+        li.innerHTML=`
+          <div class="flex justify-between items-start gap-3">
+            <div>
+              <div class="text-sm"><span class="text-[var(--accent2)]">${it.name||'Anon'}</span>: ${it.msg}</div>
+              <div class="text-xs text-gray-500 mt-1">${new Date(it.ts).toLocaleString('en-IE')}</div>
+            </div>
+            <button class="px-2 py-1 text-xs rounded bg-[var(--muted)] hover:bg-[#273345]" data-i="${i}">Delete</button>
+          </div>`;
+        listEl.appendChild(li);
+      });
+      listEl.querySelectorAll('button[data-i]').forEach(btn=>{
+        btn.onclick=()=>{
+          const idx=+btn.dataset.i; const items=loadNotes(); items.splice(idx,1); saveNotes(items); renderNotes(); toast('Note removed','ok');
+        };
+      });
+    }
+    renderNotes();
+    document.getElementById('noteForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('noteName').value.trim();
+      const msg  = document.getElementById('noteMsg').value.trim();
+      if(!msg){ toast('Message required','warn'); return; }
+      const items = loadNotes();
+      items.unshift({name,msg,ts:Date.now()});
+      saveNotes(items);
+      document.getElementById('noteMsg').value='';
+      renderNotes();
+      toast('Note posted','ok');
+    });
+
+    // Ads carousel (demo + impression counter)
+    const ads = [
+      { title:'Kilkenny Café — 2 for 1 Lattes', color:'from-emerald-500/30 to-emerald-200/20'},
+      { title:'Market Cross Sale — Up to 40% Off', color:'from-rose-500/30 to-rose-200/20'},
+      { title:'Set Theatre Tonight — Live Session', color:'from-indigo-500/30 to-indigo-200/20'},
+      { title:'Local Crafts — Parade Plaza', color:'from-amber-500/30 to-amber-200/20'},
+      { title:'Blocksmith Studio — Product of the Week', color:'from-cyan-500/30 to-cyan-200/20'},
+      { title:'Support Kilkenny GAA — Shop Local', color:'from-fuchsia-500/30 to-fuchsia-200/20'},
+    ];
+    let adIdx=0, imps=0, adTimer;
+    const slot=document.getElementById('adSlot'), impEl=document.getElementById('impCount'), idxEl=document.getElementById('adIndex');
+    function showAd(i){
+      adIdx=(i+ads.length)%ads.length;
+      const ad=ads[adIdx];
+      slot.className=`w-72 h-24 rounded-lg grid place-items-center text-sm text-gray-900 bg-gradient-to-br ${ad.color}`;
+      slot.textContent = ad.title;
+      idxEl.textContent = adIdx;
+    }
+    function nextAd(){ showAd(adIdx+1); imps++; impEl.textContent=imps; }
+    function prevAd(){ showAd(adIdx-1); imps++; impEl.textContent=imps; }
+    function startAds(){ clearInterval(adTimer); adTimer=setInterval(nextAd, 5000); }
+    document.getElementById('adNext').onclick=()=>{ nextAd(); toast('Next ad','info'); };
+    document.getElementById('adPrev').onclick=()=>{ prevAd(); toast('Prev ad','info'); };
+    document.getElementById('adSwap').onclick=()=>{
+      // move current to end to simulate "optimizer"
+      const cur=ads.splice(adIdx,1)[0]; ads.push(cur); adIdx=ads.length-1; showAd(adIdx); toast('Ad order updated','ok');
+    };
+    showAd(0); startAds();
+
+    // Product grid (25)
+    const products = Array.from({length:25}).map((_,i)=>({
+      id:`SKU-${1000+i}`,
+      name:`Studio Pick #${i+1}`,
+      blurb:['Minimal lamp','Desk tool','Travel gadget','Smart plug','Audio mini','Ambient light'][i%6],
+      img:`https://dummyimage.com/300x200/0e1629/ffffff&text=P${i+1}`,
+      specs:['Modern design','Compact footprint','Great gift'] // simple demo
+    }));
+    const grid=document.getElementById('grid');
+    function renderProducts(){
+      grid.innerHTML='';
+      products.forEach(p=>{
+        const card=document.createElement('div');
+        card.className='rounded-xl bg-[#0c1426] border border-[#1f2a3a] overflow-hidden';
+        card.innerHTML=`
+          <img src="${p.img}" alt="${p.name}" class="w-full h-28 object-cover">
+          <div class="p-3 space-y-2">
+            <div class="text-sm font-semibold">${p.name}</div>
+            <div class="text-xs text-gray-400">${p.blurb}</div>
+            <div class="flex items-center justify-between">
+              <div class="w-14 h-14 rounded-lg bg-white grid place-items-center text-xs text-black">QR</div>
+              <button class="px-3 py-1.5 rounded-lg bg-[var(--muted)] hover:bg-[#273345]" data-id="${p.id}">Details</button>
+            </div>
+            <div class="pt-2 hidden text-xs text-gray-300" id="sheet-${p.id}">
+              <ul class="list-disc ml-5">
+                ${p.specs.map(s=>`<li>${s}</li>`).join('')}
+              </ul>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+      grid.querySelectorAll('button[data-id]').forEach(btn=>{
+        btn.onclick=()=>{
+          const id=btn.dataset.id; const sheet=document.getElementById(`sheet-${id}`);
+          const open = !sheet.classList.contains('hidden');
+          // close all others
+          grid.querySelectorAll('[id^="sheet-"]').forEach(s=>s.classList.add('hidden'));
+          sheet.classList.toggle('hidden', open); // toggle this one
+        };
+      });
+    }
+    renderProducts();
+
+    // Security ticker (demo)
+    const secList=document.getElementById('secList');
+    let secEvents=[
+      {ts:Date.now()-600000, level:'info', msg:'Open studio — visitors browsing.'},
+      {ts:Date.now()-300000, level:'info', msg:'All clear.'},
+      {ts:Date.now()-120000, level:'warn', msg:'Door held open (wind).'},
+    ];
+    function renderSec(){
+      secList.innerHTML='';
+      secEvents.slice(-5).reverse().forEach(ev=>{
+        const li=document.createElement('li');
+        const color= ev.level==='warn'?'text-amber-400':ev.level==='err'?'text-red-400':'text-emerald-400';
+        li.className='p-3 rounded-xl bg-[#0c1426] border border-[#1f2a3a]';
+        li.innerHTML=`<div class="text-sm"><span class="${color} uppercase">${ev.level}</span> — ${ev.msg}</div>
+                      <div class="text-xs text-gray-500">${new Date(ev.ts).toLocaleString('en-IE')}</div>`;
+        secList.appendChild(li);
+      });
+    }
+    renderSec();
+    document.getElementById('btnSimAlert').onclick=()=>{
+      const levels=['warn','err','info']; const l=levels[Math.floor(Math.random()*levels.length)];
+      const msgs={warn:'Unattended item near exit.',err:'Possible removal of display unit.',info:'Visitor entered.'};
+      const msg=msgs[l];
+      secEvents.push({ts:Date.now(), level:l, msg});
+      renderSec();
+      toast(`Security: ${msg}`, l==='err'?'err':(l==='warn'?'warn':'ok'));
+    };
+
+    // Accessibility: allow keyboard to open first section with Enter
+    accRoot.querySelectorAll('.acc-btn').forEach(b=>b.setAttribute('role','button'));
+  </script>
+</body>
 </html>
