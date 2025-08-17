@@ -37,12 +37,8 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
-    // Use skipSuccessfulRequests to avoid rate limiting successful requests
-    skipSuccessfulRequests: true,
-    // Custom key generator for Replit environment
-    keyGenerator: (req) => {
-        return req.ip || req.connection.remoteAddress || 'anonymous';
-    }
+    skipSuccessfulRequests: true
+    // Removed custom keyGenerator to use default IP handling
 });
 app.use('/api/', limiter);
 
