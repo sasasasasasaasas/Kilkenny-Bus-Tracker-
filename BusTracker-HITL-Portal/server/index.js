@@ -29,7 +29,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Rate limiting for API protection
+// Rate limiting for API protection with proper trust proxy configuration
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -37,7 +37,12 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
-    trustProxy: true
+    // Use skipSuccessfulRequests to avoid rate limiting successful requests
+    skipSuccessfulRequests: true,
+    // Custom key generator for Replit environment
+    keyGenerator: (req) => {
+        return req.ip || req.connection.remoteAddress || 'anonymous';
+    }
 });
 app.use('/api/', limiter);
 
