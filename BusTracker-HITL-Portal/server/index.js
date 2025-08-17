@@ -9,6 +9,9 @@ require('dotenv').config({ path: envFilePath });
 
 const app = express();
 
+// Trust proxy for Replit deployment
+app.set('trust proxy', true);
+
 // Enhanced middleware for EU compliance
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' ? process.env.ALLOWED_ORIGINS?.split(',') : true,
