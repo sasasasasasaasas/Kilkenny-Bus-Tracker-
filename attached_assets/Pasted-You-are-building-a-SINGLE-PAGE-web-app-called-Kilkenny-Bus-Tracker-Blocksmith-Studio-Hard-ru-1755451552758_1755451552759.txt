@@ -1,0 +1,65 @@
+You are building a SINGLE-PAGE web app called “Kilkenny Bus Tracker — Blocksmith Studio”.
+
+Hard rules:
+- One HTML page only (no routing). All actions expand/collapse inline (accordion/scaffold effect).
+- No third-party taxi providers (NO Moová). Use stubs only.
+- Modern dark theme (Blocksmith vibe): bg #0B1220, panels #111827, accents #0EA5E9, text #E5E7EB, rounded-xl, soft shadows.
+- Mobile-first, responsive.
+
+What to build (all on the SAME page):
+1) Header bar
+   - Title + small Blocksmith logo slot
+   - Clock (local time Europe/Dublin)
+   - “Live” dot indicator
+
+2) Accordion sections (collapsed by default; only one open at a time):
+   A. Live Bus Map (placeholder)
+      - Big panel with a mock map canvas and 4–6 dummy bus markers that move slightly via JS timer.
+      - Controls: “Zoom + / -” (client-side only), “Reset”.
+   B. Studio Live Stream (placeholder)
+      - 16:9 video frame (iframe or poster image), ticker text overlay.
+      - Buttons: “Report unusual behaviour”, “Copy stream link”.
+   C. Driver (Taxi) Request — STUB
+      - Inputs: Stop selector (dropdown with KK1/KK2 stops), phone (E.164), pickup note.
+      - Button “Request Driver”.
+      - Result area shows simulated states: “Searching…”, then either “Driver accepted (ETA 7m)” or “No drivers found” after 6–12s randomized.
+      - All logic is local JS; no network calls.
+   D. Notes / Lost & Found
+      - Small composer (name optional, message required) + “Post”.
+      - List of notes with time, delete button per item.
+      - Persist to localStorage so it survives refresh.
+   E. Ads & Offers
+      - Rotating banner carousel (3–6 dummy ads).
+      - Small impression counter + “Swap order” button to simulate an optimizer.
+   F. Product Showcase (25 items)
+      - 5x5 grid of compact product cards (image, name, one-liner).
+      - Each card has a “Scan to buy” QR placeholder and “Details” button that opens an inline sheet with 2–3 bullet specs.
+   G. Security Ticker
+      - Read-only list of last 5 events (sample JSON seeded at load).
+      - “Simulate alert” button adds a new event with timestamp (red highlight for 15s).
+
+Interactions:
+- Clicking a section header expands its panel (others collapse). Smooth transitions.
+- Keyboard accessible: headers are buttons, focus ring visible.
+- Toasts for key actions (posted note, driver result, ad swapped).
+
+Tech:
+- Plain HTML + JS + Tailwind via CDN (no build tools).
+- Keep everything in index.html + a small inline <script>.
+- Use semantic structure and ARIA attributes for accordions.
+
+Deliverables:
+- index.html with:
+  - <header>, <main> with 7 accordion sections, <footer>.
+  - Tailwind CDN, minimal custom CSS (only if needed).
+  - Clean, commented JS for state, timers, and localStorage.
+- Nice, studio-modern visuals; feels production-like even with stubs.
+
+Acceptance criteria:
+- Single file loads and works offline.
+- Only one accordion section open at a time.
+- Simulated bus markers “move” on the mock map.
+- Taxi request shows randomized success/fail after a delay (no external calls).
+- Notes persist across reload via localStorage.
+- Product grid shows 25 items with QR placeholders.
+- All components look cohesive in the dark theme.
