@@ -44,7 +44,19 @@ if (process.env.NODE_ENV === 'production') {
 	}
 }
 
+// Serve built React client
+const clientPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientPath));
+
+// Catch-all handler for React Router
+app.get('*', (req, res) => {
+	if (req.path.startsWith('/api/')) {
+		return res.status(404).json({ error: 'API endpoint not found' });
+	}
+	res.sendFile(path.join(clientPath, 'index.html'));
+});
+
 const PORT = Number(process.env.PORT || 5000);
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
 	console.log(`API server listening on http://localhost:${PORT}`);
 });
